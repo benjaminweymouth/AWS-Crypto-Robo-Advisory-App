@@ -3,7 +3,7 @@ This repository represents work both in AWS Lex (chatbot) and AWS Lambda in Pyth
 
 Final lambda function is here:  [Lambda Function](https://github.com/benjaminweymouth/wk13_Robo_Advisor_AWS_Lex/blob/main/RoboAdvisor/lambda_function.py)
 
-Exported bot in ZIP files can be found here:  [ZIP](https://github.com/benjaminweymouth/wk13_Robo_Advisor_AWS_Lex/tree/main/ZIP%20files)
+Exported bot, intent and slots in ZIP files can be found here:  [ZIP](https://github.com/benjaminweymouth/wk13_Robo_Advisor_AWS_Lex/tree/main/ZIP%20files)
 
 
 Enimated GIF showing a demo of your Robo Advisor:
