@@ -8,9 +8,10 @@ Exported bot in ZIP file can be found here:
 
 Enimated GIF showing a demo of your Robo Advisor:
 
-![DashBoardRecording](https://raw.githubusercontent.com/benjaminweymouth/wk13_Robo_Advisor_AWS_Lex/main/Images/LexTesting.gif)
+![DemoRoboAdvisor](https://raw.githubusercontent.com/benjaminweymouth/wk13_Robo_Advisor_AWS_Lex/main/Images/LexTesting.gif)
 
  
 
 
 Testing animated GIF showing testing of your Robo Advisor:
+![LambdaTesting](https://raw.githubusercontent.com/benjaminweymouth/wk13_Robo_Advisor_AWS_Lex/main/Images/LambaTesting.gif)
