@@ -1,6 +1,8 @@
 ### Required Libraries ###
 from datetime import datetime
-from dateutil.relativedelta import relativedelta
+from dateutil.relativedelta import relativedelta  
+from datetime import datetime
+from botocore.vendored import requests
 
 ### Functionality Helper Functions ###
 def parse_int(n):
@@ -11,6 +13,38 @@ def parse_int(n):
         return int(n)
     except ValueError:
         return float("nan")
+        
+def parse_float(n):
+    """
+    Securely converts a non-numeric value to float.
+    """
+    try:
+        return float(n)
+    except ValueError:
+        return float("nan")
+
+### new helper function called get_recommendation ###
+def get_recommendation(risk_level):
+    
+        if (risk_level == 'None'):
+            recommendation = "100% bonds (AGG), 0% equities (SPY)"    
+            return recommendation
+        elif (risk_level == 'Very Low'):
+            recommendation = "80% bonds (AGG), 20% equities (SPY)"        
+            return recommendation
+        elif (risk_level == 'Low'):
+            recommendation = "60% bonds (AGG), 40% equities (SPY)"        
+            return recommendation     
+        elif (risk_level == 'Medium'):
+            recommendation = "40% bonds (AGG), 60% equities (SPY)"        
+            return recommendation
+        elif (risk_level == 'High'):
+            recommendation = "20% bonds (AGG), 80% equities (SPY)"        
+            return recommendation
+        elif (risk_level == 'Very High'):
+            recommendation = "0% bonds (AGG), 100% equities (SPY)"        
+            return recommendation
+       
 
 
 def build_validation_result(is_valid, violated_slot, message_content):
@@ -79,6 +113,38 @@ def close(session_attributes, fulfillment_state, message):
 
     return response
 
+def validate_data(age, investment_amount, intent_request):
+    """
+    Validates the data provided by the user.
+    """
+
+    # Validate that the user is over 18 years old
+    if age is not None:
+        convert_age = int(age)
+         
+        if convert_age >= 65 or convert_age <= 0:
+            return build_validation_result(
+                False,
+                "age",
+                "The maximum age to use this service is 65, "
+                "can you please provide an age between 0 and 65?",
+            )
+            
+
+    # Validate the investment amount, it should be > 0
+    if investment_amount is not None:
+        investment_amount = parse_float(investment_amount)
+        # Since parameters are strings it's important to cast values
+        if investment_amount < 5000:
+            return build_validation_result(
+                False,
+                "investmentAmount",
+                "The amount to convert should be greater than 5000, "
+                "please provide a larger amount in dollars.",
+            )
+
+    # A True results is returned if age or amount are valid
+    return build_validation_result(True, None, None)
 
 ### Intents Handlers ###
 def recommend_portfolio(intent_request):
@@ -98,19 +164,35 @@ def recommend_portfolio(intent_request):
         # for the first violation detected.
 
         ### YOUR DATA VALIDATION CODE STARTS HERE ###
+        # Gets all the slots
+        slots = get_slots(intent_request)
 
+        # Validates user's input using the validate_data function
+        validation_result = validate_data(age, investment_amount, intent_request)
+
+        # If the data provided by the user is not valid
+        # the elicitSlot dialog action is used to re-prompt for the first violation detected.
+        if not validation_result["isValid"]:
+            slots[validation_result["violatedSlot"]] = None  # Cleans invalid slot
+
+            # Returns an elicitSlot dialog to request new data for the invalid slot
+            return elicit_slot(
+                intent_request["sessionAttributes"],
+                intent_request["currentIntent"]["name"],
+                slots,
+                validation_result["violatedSlot"],
+                validation_result["message"],
+            )
         ### YOUR DATA VALIDATION CODE ENDS HERE ###
 
         # Fetch current session attibutes
         output_session_attributes = intent_request["sessionAttributes"]
 
         return delegate(output_session_attributes, get_slots(intent_request))
-
-    # Get the initial investment recommendation
-
-    ### YOUR FINAL INVESTMENT RECOMMENDATION CODE STARTS HERE ###
+    initial_recommendation = get_recommendation(risk_level)
 
     ### YOUR FINAL INVESTMENT RECOMMENDATION CODE ENDS HERE ###
+
 
     # Return a message with the initial recommendation based on the risk level.
     return close(
