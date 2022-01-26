@@ -6,7 +6,7 @@ Final lambda function is here:  [Lambda Function](https://github.com/benjaminwey
 Exported bot, intent and slots in ZIP files can be found here:  [ZIP](https://github.com/benjaminweymouth/wk13_Robo_Advisor_AWS_Lex/tree/main/ZIP%20files)
 
 
-Enimated GIF showing a demo of your Robo Advisor:
+An animated GIF showing a demo of the Robo Advisor:
 
 ![DemoRoboAdvisor](https://raw.githubusercontent.com/benjaminweymouth/wk13_Robo_Advisor_AWS_Lex/main/Images/LexTesting.gif)
 
